@@ -1,0 +1,76 @@
+@(speakers: List[Speaker], offset: Int)
+
+@import helper._
+@import views.ViewHelpers._
+@import models.Speaker
+
+@main("Find a Speaker") {
+    <h1>All Speakers</h1>
+    <div class="paginateButtons span-24 last">
+        @if(currentPage(offset, 8) != 0) {
+            <a href="/speaker/find?offset=@previousOffset(offset, 8)" class="prevLink">Prev</a>
+        }
+        @for(i <- 0 to pages(Speaker.count, 8)) {
+            @if(i == currentPage(offset, 8)) {
+                <span class="currentStep">@(i+1)</span>
+            } else {
+                <a href="/speaker/find?offset=@(i * 8)" class="step">@(i+1)</a>
+            }
+        }
+        @if(currentPage(offset, 8) != pages(Speaker.count, 8)) {
+            <a href="/speaker/find?offset=@nextOffset(offset, 8)" class="nextLink">Next</a>
+        }
+    </div>
+
+    @for((speaker, i) <- speakers.view.zipWithIndex) {
+        @if(i % 4 == 0) { <div class="speakerRow span-24 last"> }
+            <div class="speaker span-6 @if((i % 4 == 3) || (speakers.size - i == 1)) {last}">
+                <img id="speakerImage-@speaker.id" class="speakerImage" src="@speaker.imageUrl"/><br/>
+                <a href="/show/@speaker.id">@speaker.name</a>
+            </div>
+        @if((i % 4 == 3) || (speakers.size - i == 1)) {</div>}
+    }
+
+    @for(speaker <- speakers) {
+        <div id="speakerInfo-@speaker.id" class="speakerInfo span-24 last" style="display:none">
+            @speaker.bio
+        </div>
+    }
+
+    <script type="text/javascript">
+        var mySleepId;
+
+        function displaySpeakerInfo(element) {
+            var speakerId = element.id.substring(element.id.indexOf('-') + 1);
+
+            var myInfo = $('#speakerInfo-' + speakerId);
+            var elementPos = $(element).offset();
+            var elementWidth = $(element).width();
+
+            var styles = {
+                top: elementPos.top +'px',
+                left: (elementPos.left+elementWidth+5)+'px'
+            };
+
+            myInfo.css(styles);
+            myInfo.fadeIn();
+        }
+
+       $(function() {
+            $('.speakerImage').each(function(index, element) {
+                $(element).bind('mouseover', function() {
+                    var delay = function() { displaySpeakerInfo(element); };
+                    mySleepId = setTimeout(delay, 1000);
+                });
+
+                $(element).bind('mouseout', function() {
+                    if (mySleepId != null) {
+                        clearTimeout(mySleepId);
+                    }
+                    var speakerId = element.id.substring(element.id.indexOf('-') + 1);
+                    $('#speakerInfo-' + speakerId).fadeOut();
+                });
+            });
+        });
+    </script>
+}
