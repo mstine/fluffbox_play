@@ -1,0 +1,19 @@
+@(speaker: Speaker)
+
+@import helper._
+
+@main("Speaker Details") {
+<div class="speakerDetails span-24 last">
+    <div class="speakerDetailsLeft span-8">
+        <img src="@speaker.imageUrl"/>
+        <p>
+            <a href="/speakerClone/findBySpeaker/@speaker.id">Find this Speaker</a>
+        </p>
+    </div>
+    <div class="speakerDetailsRight span-16 last">
+        <h1>@speaker.name</h1>
+        <h2>@speaker.title</h2>
+        <p>@speaker.bio</p>
+    </div>
+</div>
+}

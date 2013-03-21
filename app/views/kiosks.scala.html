@@ -1,0 +1,109 @@
+@()
+
+@main("Find a Fluffbox") {
+    <div class="columns span-24 last">
+        <div class="left span-11">
+            <h2>Find a Fluffbox</h2>
+            <div class="kioskSearch">
+                <form onsubmit="search(this);return false">
+                    <label for="searchCriteria">Location:</label>
+                    <input type="text" id="searchCriteria" name="searchCriteria" value="" />
+                    <input type="submit" name="searchButton" value="Search" id="searchButton" />
+                </form>
+            </div>
+            <div class="searchResults"><ul id="kioskList"></ul></div>
+        </div>
+        <div class="right span-13 last">
+            <div id="map_canvas" style="width:490px; height:400px"></div>
+        </div>
+    </div>
+
+    <script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=AIzaSyDMAoCSEAcF5VzoA9Dm_fDT_xQGbZ5T9TI&sensor=false"
+        type="text/javascript"></script>
+    <script type="text/javascript">
+        function search(form) {
+            $.post('/kiosk/search', $(form).serialize(), function(data) {
+                updateKiosks(data);
+            });
+        }
+
+        function updateKiosks(data) {
+            map.clearOverlays();
+
+            var kioskList = $('#kioskList');
+            kioskList.children().each(function(oldKiosk) {
+                $(oldKiosk).remove();
+            });
+
+           $(data).each(function(index, kiosk) {
+                var kioskHtml = '<strong><a href="#" class="kioskLink" id="kiosk-link-' + kiosk.id + '">' + kiosk.store;
+
+                if (kiosk.inside) {
+                    kioskHtml += ' (Inside)</a></strong><br/>';
+                } else {
+                    kioskHtml += ' (Outside)</a></strong><br/>';
+                }
+
+                kioskHtml += kiosk.address;
+                kioskHtml += '<br/>';
+                kioskHtml += kiosk.city;
+                kioskHtml += ', ';
+                kioskHtml += kiosk.state;
+                kioskHtml += ' ';
+                kioskHtml += kiosk.zipCode;
+                kioskHtml += '<br/><br/>'
+                kioskHtml += '<a class="kioskLink" href="/speakerClone/findByKiosk/'+kiosk.id+'">Find Speakers Here</a>';
+
+                kioskList.append('<li class="kioskListItem">' + kioskHtml + '</li>');
+
+                var toGeocode = kiosk.address + ' ' + kiosk.city +
+                        ', ' + kiosk.state + ' ' + kiosk.zipCode;
+
+               var geocodeIt = function() {
+                geocoder.getLatLng(toGeocode,
+                        function(point) {
+                            console.log(toGeocode);
+                            var marker = new GMarker(point);
+
+                            GEvent.addListener(marker, "click", function() {
+                                map.openInfoWindowHtml(point, kioskHtml);
+                            });
+
+                            map.addOverlay(marker);
+
+                            $('#kiosk-link-' + kiosk.id).bind("click", function(e) {
+                                map.openInfoWindowHtml(point, kioskHtml);
+                            });
+                        });
+               };
+
+               setTimeout(geocodeIt, 1000);
+            });
+        }
+
+        var geocoder = new GClientGeocoder();
+        var map;
+
+        function initialize() {
+            if (GBrowserIsCompatible()) {
+                map = new GMap2(document.getElementById("map_canvas"));
+                map.addControl(new GSmallZoomControl3D());
+
+                var address = 'Ft. Lauderdale';
+
+                geocoder.getLatLng(address, function(point) {
+                    map.setCenter(point, 11);
+
+                    //var marker = new GMarker(point);
+                    //map.addOverlay(marker);
+                });
+            }
+        }
+
+        window.unload = GUnload();
+
+        $(function() {
+            initialize();
+        });
+    </script>
+}

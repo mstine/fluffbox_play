@@ -9,7 +9,9 @@ object SpeakerController extends Controller {
     Ok(views.html.speakers(Speaker.all(offset), offset))
   }
 
-  def get(id: Long) = TODO
+  def get(id: Long) = Action {
+    Ok(views.html.speaker(Speaker.getBy(id)))
+  }
 
   def search = TODO
 

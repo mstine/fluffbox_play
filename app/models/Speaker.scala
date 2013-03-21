@@ -26,6 +26,13 @@ object Speaker {
         .as(speaker *)
   }
 
+  def getBy(id: Long): Speaker = DB.withConnection {
+    implicit c =>
+      SQL("select * from speaker where id = {id}")
+        .on('id -> id)
+        .as(speaker.single)
+  }
+
   def count(): Long = DB.withConnection {
     implicit c =>
       SQL("select count(*) from speaker").as(scalar[Long].single)

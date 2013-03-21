@@ -1,4 +1,4 @@
-import models.Speaker
+import models.{Kiosk, Speaker}
 import play.api._
 
 object Global extends GlobalSettings {
@@ -52,6 +52,28 @@ object InitialData {
         Speaker("David Bock", "Principal Consultant, CodeSherpas Inc.", "http://www.nofluffjuststuff.com/s/images/bio/34_Bock_20110408_053548_medium_sq.jpg", """ David Bock is a Principal Consultant at CodeSherpas, a company he founded in 2007. Mr. Bock is also the President of the Northern Virginia Java Users Group, the Editor of O'Reilly's OnJava.com website, and a frequent speaker on technology in venues such as the No Fluff Just Stuff Software Symposiums.   In January 2006, Mr. Bock was honored by being awarded the title of Java Champion by a panel of esteemed leaders in the Java Community in a program sponsored by Sun. There are approximately 100 active Java Champions worldwide.   David has also served on several JCP panels, including the Specification of the Java 6 Platform and the upcoming Java Module System.  In addition to his public speaking and training activities, Mr. Bock actively consults as a software engineer, project manager, and team mentor for commercial and government clients.  """),
         Speaker("Dan Allen", "Senior Software Engineer", "http://www.nofluffjuststuff.com/s/images/bio/5206_Allen_20110408_050959_medium_sq.jpg", """Dan Allen is a member of the Seam and Web Beans project teams at JBoss by Red Hat, author of Seam in Action and a frequent speaker at major industry conferences such as JavaOne, Devoxx, TSSJS, Jazoon and JSFOne. Dan is known for his passionate work, with nearly a decade of development experience using technologies that include Java frameworks (Seam, JSF, EJB3, Hibernate, Spring, Struts), testing frameworks (JUnit, TestNG), JavaScript and DOM scripting, CSS and page layouts, Maven 2, Ant, Groovy, and many others.  Quickly after graduating from college, Dan became captivated by the world of free and open source software (FOSS). His involvment in FOSS helped him transition into the software development industry. He soon discovered the combination of Linux and the Java EE platform to be the ideal blend on which to build his professional career. In his search for a robust Web framework, Dan discovered JBoss Seam, which was quickly granted this most coveted spot in his development toolbox. The rest, as they say, is history. Dan is also a dedicated open source and Linux advocate and blogs about his experiences regularly. You can keep up with his discoveries by subscribing to his blog at http://mojavelinux.com. """)
       ).foreach(Speaker.create)
+    }
+
+    if (Kiosk.count() == 0) {
+      Seq(
+        Kiosk("Walgreens", true, "3895 W Broward Blvd", "Ft Lauderdale", "FL", "33312-1017"),
+        Kiosk("Winn Dixie", false, "1531 N State Road 7", "Lauderhill", "FL", "33313-5807"),
+        Kiosk("Winn Dixie", false, "3800 N Ocean Blvd", "Fort Lauderdale", "FL", "33308-6432"),
+        Kiosk("Albertsons", true, "950 E Commercial Blvd", "Oakland Park", "FL", "33334-3210"),
+        Kiosk("Walgreens", true, "601 E Commercial Blvd", "Oakland Park", "FL", "33334-3239"),
+        Kiosk("Walmart", true, "3001 N State Rd 7", "Lauderdale Lakes", "FL", "33313-1913"),
+        Kiosk("Winn Dixie", false, "3116 W Commercial Blvd", "Fort Lauderdale", "FL", "33309-3415"),
+        Kiosk("Walmart Neighborhood Markets", true, "1199 S Federal Hwy", "Pompano Beach", "FL", "33062-7067"),
+        Kiosk("Exxon Mobil", true, "2399 S University Dr", "Davie", "FL", "33324-5844"),
+        Kiosk("Walgreens", true, "3015 S University Dr", "Davie", "FL", "33328-2013"),
+        Kiosk("Exxon Mobil", true, "1799 N University Dr", "Plantation", "FL", "33322-4111"),
+        Kiosk("Walmart", true, "2300 W Atlantic Blvd", "Pompano Beach", "FL", "33069-2655"),
+        Kiosk("Walgreens", true, "7105 W McNab Rd", "North Lauderdale", "FL", "33068-5492"),
+        Kiosk("Walmart", true, "3306 N University Dr", "Sunrise", "FL", "33351"),
+        Kiosk("Walmart", true, "7300 W McNab Rd", "North Lauderdale", "FL", "33068-5481"),
+        Kiosk("Walmart", true, "1885 N Pine Island Rd", "Plantation", "FL", "33322-5208"),
+        Kiosk("Walgreens", true, "6817 Taft St", "Hollywood", "FL", "33024-5601")
+      ).foreach(Kiosk.create)
     }
   }
 

@@ -7,6 +7,8 @@ GET     /                           controllers.Application.index
 GET     /speaker/find               controllers.SpeakerController.find(offset: Int ?= 0)
 GET     /speaker/:id                controllers.SpeakerController.get(id: Long)
 POST    /speaker/search             controllers.SpeakerController.search
+GET     /kiosk/find                 controllers.KioskController.find
+POST    /kiosk/search               controllers.KioskController.search
 
 
 # Map static resources from the /public folder to the /assets URL path

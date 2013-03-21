@@ -26,7 +26,7 @@
         @if(i % 4 == 0) { <div class="speakerRow span-24 last"> }
             <div class="speaker span-6 @if((i % 4 == 3) || (speakers.size - i == 1)) {last}">
                 <img id="speakerImage-@speaker.id" class="speakerImage" src="@speaker.imageUrl"/><br/>
-                <a href="/show/@speaker.id">@speaker.name</a>
+                <a href="/speaker/@speaker.id">@speaker.name</a>
             </div>
         @if((i % 4 == 3) || (speakers.size - i == 1)) {</div>}
     }
